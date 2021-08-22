@@ -77,3 +77,5 @@ String wallpaperSectionName = '[Containments][1][Wallpaper][org.kde.image][Gener
 
 RxBool isDarkModeOn = false.obs;
 RxString pickedWallpaperColorMode = 'dominant'.obs;
+
+bool alreadyTriedToApplyColorscheme = false;

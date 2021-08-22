@@ -65,7 +65,7 @@ Future<String> getCurrentColorSchemeName() async {
       'sh',
       [
         '-c',
-        "plasma-apply-colorscheme  --list-schemes | grep current | cut -c 1-3 --complement | sed 's/(current color scheme)//' | xargs echo -n"
+        "LANG=C; plasma-apply-colorscheme  --list-schemes | grep current | cut -c 1-3 --complement | sed 's/(current color scheme)//' | xargs echo -n"
       ],
       runInShell: true,
       includeParentEnvironment: true);

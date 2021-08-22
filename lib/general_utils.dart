@@ -1,11 +1,12 @@
 import 'dart:ui';
+import 'package:desktop_linux/color_scheme_read_and_write_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'app_data.dart';
 import 'color_scheme_change_utils.dart';
 import 'typedefs.dart';
-import 'dart:math';
+import 'dart:io';
 
 ColorSchemeSection getSectionValueMap(
     int lineNumber, List<String> colorSchemeLines) {
@@ -118,17 +119,17 @@ void showFailureMessage({required String message, required context}) {
 Future<void> applyColorScheme(BuildContext context, {List<String>? color, int? index}) async {
   var colorSchemeToWrite = await generateColorScheme(
     color ?? colorList[index ?? 0],
-    onFileReadFailure: () => showFailureMessage(
+    onFileReadFailure: () => alreadyTriedToApplyColorscheme ? showFailureMessage(
       message: "Failed to read color current color scheme.",
       context: context,
-    ),
+    ) : print("") //ignore error for first run,
   );
   await setColorScheme(
     colorSchemeToWrite,
-    onFileWriteFailure: () => showFailureMessage(
+    onFileWriteFailure: () => alreadyTriedToApplyColorscheme ? showFailureMessage(
       message: "Failed to write new color scheme.",
       context: context,
-    ),
+    ): removeGeneratedThemeFiles(), // Try to avoid error for first time and try again
   );
   await changeSystemColorScheme(
     onChangeColorFailure: () => showFailureMessage(
@@ -136,6 +137,8 @@ Future<void> applyColorScheme(BuildContext context, {List<String>? color, int? i
       context: context,
     ),
   );
+
+  alreadyTriedToApplyColorscheme = true;
 }
 
 List<String> colorAsRgbStringList(Color materialColor) {
@@ -147,4 +150,20 @@ List<String> colorAsRgbStringList(Color materialColor) {
   return color;
 }
 
-double logBase(num x, num base) => log(x) / log(base);
+void removeGeneratedThemeFiles() async {
+  String homeDir = await getHomeDir();
+  List<File> fileListToBeDeleted = [
+    File("$homeDir/.local/share/color-schemes/${colorSchemeNamesToWriteTo[0]}"),
+    File("$homeDir/.local/share/color-schemes/${colorSchemeNamesToWriteTo[1]}"),
+  ];
+
+  try {
+    for(var file in fileListToBeDeleted){
+      await file.delete();
+    }
+  }
+  catch(e){
+    print("can't delete file. The error is $e. Try manually deleting generaterated"
+        "theme files in ~/.local/share/color-schemes/ and try again.");
+  }
+}
