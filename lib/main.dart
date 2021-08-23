@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DesktopWindow.setMinWindowSize(Size(Get.width * 0.70, Get.width * 0.62));
+  await DesktopWindow.setMinWindowSize(Size(Get.width * 0.50, Get.height * 0.60));
   runApp(const MyApp());
 }
 

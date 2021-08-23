@@ -43,7 +43,8 @@ Future<String> getCurrentlySetThemePath() async {
       return colorSchemePath;
     }
   }
-  throw ("Error! Didn't find the color scheme!");
+  print("Error! Didn't find the color scheme! The paths searched for are $possibleColorSchemePathList");
+  return "/usr/share/color-schemes/BreezeLight.colors"; // fallback color scheme.
 }
 
 Future<List<String>> getPossibleColorSchemePathList() async {

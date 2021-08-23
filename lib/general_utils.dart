@@ -110,33 +110,57 @@ void showFailureMessage({required String message, required context}) {
     context: context,
     builder: (context) => AlertDialog(
       title: const Text('Color Scheme Changer'),
-      content: Text(message, style: TextStyle(color: Theme.of(context).errorColor),),
-      actions: [TextButton(onPressed: () => Get.back(), child: const Text('Ok', style: TextStyle(color: Colors.green),))],
+      content: Text(
+        message,
+        style: TextStyle(color: Theme.of(context).errorColor),
+      ),
+      actions: [
+        TextButton(
+            onPressed: () => Get.back(),
+            child: const Text(
+              'Ok',
+              style: TextStyle(color: Colors.green),
+            ))
+      ],
     ),
   );
 }
 
-Future<void> applyColorScheme(BuildContext context, {List<String>? color, int? index}) async {
-  var colorSchemeToWrite = await generateColorScheme(
-    color ?? colorList[index ?? 0],
-    onFileReadFailure: () => alreadyTriedToApplyColorscheme ? showFailureMessage(
-      message: "Failed to read color current color scheme.",
-      context: context,
-    ) : print("") //ignore error for first run,
-  );
+Future<void> applyColorScheme(BuildContext context,
+    {List<String>? color, int? index}) async {
+  bool encounteredWriteError = false;
+
+  var colorSchemeToWrite =
+      await generateColorScheme(color ?? colorList[index ?? 0],
+          onFileReadFailure: () => alreadyTriedToApplyColorscheme
+              ? showFailureMessage(
+                  message: "Failed to read color current color scheme.",
+                  context: context,
+                )
+              : print("") //ignore error for first run,
+          );
   await setColorScheme(
     colorSchemeToWrite,
-    onFileWriteFailure: () => alreadyTriedToApplyColorscheme ? showFailureMessage(
-      message: "Failed to write new color scheme.",
-      context: context,
-    ): removeGeneratedThemeFiles(), // Try to avoid error for first time and try again
+    onFileWriteFailure: () => alreadyTriedToApplyColorscheme
+        ? showFailureMessage(
+            message: "Failed to write new color scheme.",
+            context: context,
+          )
+        : () { //else
+            removeGeneratedThemeFiles();
+            encounteredWriteError = true;
+            applyColorScheme(context, color: color, index: index);
+          }(), // Try to avoid error for first time and try again
   );
-  await changeSystemColorScheme(
-    onChangeColorFailure: () => showFailureMessage(
-      message: "Failed to change color scheme.",
-      context: context,
-    ),
-  );
+
+  if (!encounteredWriteError) {
+    await changeSystemColorScheme(
+      onChangeColorFailure: () => showFailureMessage(
+        message: "Failed to change color scheme.",
+        context: context,
+      ),
+    );
+  }
 
   alreadyTriedToApplyColorscheme = true;
 }
@@ -158,12 +182,12 @@ void removeGeneratedThemeFiles() async {
   ];
 
   try {
-    for(var file in fileListToBeDeleted){
+    for (var file in fileListToBeDeleted) {
       await file.delete();
     }
-  }
-  catch(e){
-    print("can't delete file. The error is $e. Try manually deleting generaterated"
+  } catch (e) {
+    print(
+        "can't delete file. The error is $e. Try manually deleting generaterated"
         "theme files in ~/.local/share/color-schemes/ and try again.");
   }
 }
