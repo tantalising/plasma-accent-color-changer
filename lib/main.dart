@@ -1,6 +1,6 @@
 
-import 'package:desktop_linux/section_title_ui.dart';
-import 'package:desktop_linux/wallpaper_color_picker_modes_ui.dart';
+import 'section_title_ui.dart';
+import 'wallpaper_color_picker_modes_ui.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

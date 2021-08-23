@@ -1,4 +1,4 @@
-import 'package:desktop_linux/section_title_ui.dart';
+import 'section_title_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

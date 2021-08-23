@@ -1,10 +1,9 @@
-import 'package:desktop_linux/toggle_button_ui.dart';
+import 'clickable_text_widget.dart';
+import 'toggle_button_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'app_data.dart';
-
-
 import 'menu_item_ui.dart';
 
 class Menu extends StatelessWidget {
@@ -12,6 +11,17 @@ class Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<List<String>> aboutSectionTextList = [
+      ["normal", "\nLicense: "],
+      [
+        "rich",
+        "BSD 3-Clause License (Revised)\n",
+        "https://www.tldrlegal.com/l/bsd3"
+      ],
+      ["normal", "\nCredit for icon: "],
+      ["rich", "Icons8\n", "https://icons8.com"],
+    ];
+
     return PopupMenuButton(
         icon: const Icon(Icons.menu),
         offset: Offset(-Get.width / 180, Get.width / 36),
@@ -31,6 +41,9 @@ class Menu extends StatelessWidget {
                       applicationVersion: packageInfo.version,
                       applicationLegalese:
                           "© ${DateTime.now().year} Tanbir Jishan. All Rights Reserved.",
+                      children: [
+                        ClickableText(aboutSectionTextList),
+                      ],
                     );
                   },
                 ),

@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:desktop_linux/color_scheme_read_and_write_utils.dart';
+import 'color_scheme_read_and_write_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

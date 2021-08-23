@@ -1,4 +1,4 @@
-name: desktop_linux
+name: Kolorify
 description: A kde plasma accent color changer
 
 # The following line prevents the package from being accidentally published to
@@ -39,6 +39,7 @@ dependencies:
   palette_generator: ^0.3.0
   flex_color_picker: ^2.1.2
   package_info_plus: ^1.0.4
+  url_launcher: ^6.0.9
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,4 @@
-import 'package:desktop_linux/radio_tile_ui.dart';
+import 'radio_tile_ui.dart';
 import 'package:flutter/material.dart';
 import 'app_data.dart';
 import 'color_area_ui.dart';
