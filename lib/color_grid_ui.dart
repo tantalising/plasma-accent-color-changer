@@ -31,6 +31,7 @@ class ColorCard extends StatelessWidget {
   final int index;
   ColorCard({Key? key, required this.index}) : super(key: key);
 
+  final initialElevation = Get.size.width / 144;
   var padding = Get.size.width / 12;
   var elevation = (Get.size.width / 144).obs;
   var borderRadius = (Get.size.width / 72).obs;
@@ -76,7 +77,7 @@ class ColorCard extends StatelessWidget {
       elevation.value = elevation.value + 20;
       scale.value = 1.1;
     } else if (!clicked) {
-      elevation.value = elevation.value - 20;
+      elevation.value = initialElevation;
       scale.value = 1.0;
     }
   }
@@ -89,7 +90,7 @@ class ColorCard extends StatelessWidget {
     await applyColorScheme(context, index: index);
 
     rotationAngle.value = 0;
-    elevation.value = elevation.value - 20;
+    elevation.value = initialElevation; // No matter what elevation should be restored to initial value.
     scale.value = 1.0;
     clicked = false;
   }
