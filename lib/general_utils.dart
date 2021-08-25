@@ -146,10 +146,10 @@ Future<void> applyColorScheme(BuildContext context,
             message: "Failed to write new color scheme.",
             context: context,
           )
-        : () { //else
-            removeGeneratedThemeFiles();
+        : () async { //else
+            await removeGeneratedThemeFiles();
             encounteredWriteError = true;
-            applyColorScheme(context, color: color, index: index);
+            await applyColorScheme(context, color: color, index: index);
           }(), // Try to avoid error for first time and try again
   );
 
@@ -174,7 +174,7 @@ List<String> colorAsRgbStringList(Color materialColor) {
   return color;
 }
 
-void removeGeneratedThemeFiles() async {
+Future<void> removeGeneratedThemeFiles() async {
   String homeDir = await getHomeDir();
   List<File> fileListToBeDeleted = [
     File("$homeDir/.local/share/color-schemes/${colorSchemeNamesToWriteTo[0]}"),
